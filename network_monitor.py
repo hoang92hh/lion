@@ -9,6 +9,8 @@ Monitor Google Flow Network Response
 
 import asyncio
 
+import config
+
 
 class NetworkMonitor:
 
@@ -24,16 +26,18 @@ class NetworkMonitor:
     async def on_response(self, response):
 
         try:
+            if response.request.method != "POST":
+                return
 
-            if (
-                response.request.method != "POST"
-                or "flowMedia:batchGenerateImages" not in response.url
+            if not any(
+                    endpoint in response.url
+                    for endpoint in config.NETWORK_ENDPOINTS.values()
             ):
                 return
 
             data = await response.json()
 
-            workflows = data.get("workflows", [])
+            workflows = data.get("workflows")
 
             if not workflows:
                 return
@@ -42,7 +46,8 @@ class NetworkMonitor:
 
             self.asset_name = metadata.get("displayName")
 
-            print(f"Asset Name : {self.asset_name}")
+            if self.asset_name:
+                print(f"Asset Name : {self.asset_name}")
 
         except Exception as e:
 
@@ -61,6 +66,6 @@ class NetworkMonitor:
 
                 return name
 
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(1)
 
         return None

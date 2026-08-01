@@ -132,3 +132,9 @@ CDP_URL = f"http://127.0.0.1:{CHROME_CDP_PORT}"
 # Thời gian chờ nhận Asset từ Google Flow
 NETWORK_TIMEOUT = 30.0
 DEFAULT_TIMEOUT = 30000
+
+#NetWork
+NETWORK_ENDPOINTS = {
+    "image":"flowMedia:batchGenerateImages",
+    "video":"video:batchAsyncGenerateVideoReferenceImages"
+}
