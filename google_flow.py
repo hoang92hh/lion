@@ -179,24 +179,24 @@ class GoogleFlow:
 # Generate
 # ==========================================================
 
-    async def input_prompt(self,final_prompt):
-
+    async def input_prompt(self, final_prompt):
         print(final_prompt)
 
-        await self.page.click(
-            config.SELECTORS["main_prompt_area"]
-        )
+        try:
+            # 1. Xác định ô nhập liệu dựa trên selector từ file cấu hình
+            prompt_selector = config.SELECTORS["main_prompt_area"]
 
-        await self.page.keyboard.type(
-            final_prompt
-        )
+            # 2. Chờ cho đến khi ô nhập liệu xuất hiện và sẵn sàng trên màn hình
+            await self.page.wait_for_selector(prompt_selector, state="visible", timeout=5000)
 
-        await asyncio.sleep(config.SHORT_DELAY)
+            # 3. Sử dụng hàm fill của đối tượng page để "dán" (paste) toàn bộ văn bản lập tức
+            await self.page.fill(prompt_selector, final_prompt)
 
-        await self.page.keyboard.type(" ")
+            # 4. Giữ lại khoảng dừng ngắn để giao diện kịp cập nhật dữ liệu
+            await asyncio.sleep(config.NORMAL_DELAY)
 
-        await asyncio.sleep(config.SHORT_DELAY)
-
+        except Exception as e:
+            print(f"Lỗi khi nhập prompt: {e}")
 
     async def click_generate(self):
 
