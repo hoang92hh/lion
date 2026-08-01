@@ -61,7 +61,6 @@ Scene 3
 unaware that every movement is being watched.
 
 Nội dung:
-
 camera chuyển sang bụi cỏ
 lộ mắt sư tử
 
@@ -166,3 +165,4 @@ Scene	Nội dung	Độ dài
 12	Kéo con mồi rời đi, kết thúc	5–6 s
 
 Như vậy, với đoạn văn này bạn có thể dựng thành 12 scene chính (storyboard), hoặc mở rộng thành khoảng 20–30 shot điện ảnh nếu mỗi scene được chia thành nhiều góc máy khác nhau.
+

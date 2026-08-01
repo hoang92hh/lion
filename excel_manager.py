@@ -262,3 +262,35 @@ def get_template_dict():
                 sheet.cell(row=row, column=2).value or ""
             )
     return template_dict
+
+
+
+# Lay ra cac Recorde completed theo scenario_type
+def get_scenario_data_by_type(scenario_type):
+
+    scenario_list = []
+    for scenario_type in config.SCENARIO_TYPES:
+        sheet = open_workbook(scenario_type)
+        if sheet is None:
+            continue
+
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            if not row or not any(cell is not None for cell in row):
+                continue
+
+            scene = {
+                "scene_id": row[0] if len(row) > 0 and row[0] is not None else "",
+                "template_key": row[1] if len(row) > 1 and row[1] is not None else "",
+                "prompt_core": row[2] if len(row) > 2 and row[2] is not None else "",
+                "character_list": row[3] if len(row) > 3 and row[3] is not None else "",
+                "reference_list": row[4] if len(row) > 4 and row[4] is not None else "",
+                "final_prompt": row[5] if len(row) > 5 and row[5] is not None else "",
+                "status_time": row[6] if len(row) > 6 and row[6] is not None else "",
+                "output_id": row[7] if len(row) > 7 and row[7] is not None else "",
+                "file_name": row[8] if len(row) > 8 and row[8] is not None else ""
+            }
+
+            if scene["status_time"] == "Done":
+                scenario_list.append(scene)
+
+    return scenario_list

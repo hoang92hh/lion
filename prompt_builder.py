@@ -3,6 +3,7 @@ Veo 3 Storyboard Station
 prompt_builder.py
 """
 import config
+import re
 
 # ==========================================================
 # List
@@ -25,12 +26,15 @@ def normalize_list(value):
 # Prompt
 # ==========================================================
 
-def replace_placeholder(prompt,index,asset_list):
 
-    return prompt.replace(
-        f"{{{index}}}",
-        ", ".join(asset_list)
-    )
+def replace_placeholder(prompt, index, asset_list):
+
+    def replace(match):
+        asset_index = int(match.group(1))
+        return asset_list[asset_index] if asset_index < len(asset_list) else ""
+
+    pattern = rf"\{{{index}\.(\d+)\}}"
+    return re.sub(pattern, replace, prompt)
 
 
 def build_prompt(scene_id, template,prompt_core,character_list,reference_list):
@@ -40,18 +44,9 @@ def build_prompt(scene_id, template,prompt_core,character_list,reference_list):
         prompt_core
     ) if template else prompt_core
 
-    prompt = replace_placeholder(
-        prompt,
-        1,
-        character_list
-    )
+    prompt = replace_placeholder( prompt,1, character_list )
 
-    prompt = replace_placeholder(
-        prompt,
-        2,
-        reference_list
-    )
-    prompt = scene_id +" " + prompt
+    prompt = replace_placeholder( prompt, 2, reference_list )
 
     return prompt.strip()
 

@@ -11,6 +11,7 @@ import config
 from function import build_scene
 from google_flow import GoogleFlow
 from network_monitor import NetworkMonitor
+from asset_manager import AssetManager
 
 _running = False
 
@@ -27,10 +28,10 @@ async def run_scenario(ui,scenario_type):
 
     google = GoogleFlow()
     network = NetworkMonitor()
+    asset = AssetManager(scenario_type)
 
     await google.connect()
     await network.attach(google.page)
-
 
 
     scene_list = build_scene(scenario_type)
@@ -54,18 +55,26 @@ async def run_scenario(ui,scenario_type):
                 scene["character_list"]
             )
 
-            await google.inject_reference(
+            # thay the reference-value tuong ung voi reference-key
+            reference_list = asset.replace_reference(
                 scene["reference_list"]
             )
 
-            await google.input_prompt(
-                scene["final_prompt"]
+            await google.inject_reference(
+                reference_list
             )
 
+            final_prompt = scene["final_prompt"]
+            final_prompt = asset.replace_text(final_prompt)
+            await google.input_prompt(final_prompt)
 
             await google.click_generate()
-            await asyncio.sleep(config.GENERATE_WAIT_TIME)
+
             asset_name = await network.wait_file_name()
+            asset.add_asset(
+                scene["scene_id"],
+                asset_name
+            )
 
             if asset_name is None:
                 raise Exception("Generate timeout")
@@ -78,7 +87,7 @@ async def run_scenario(ui,scenario_type):
                 config.STATUS_DONE,
                 asset_name
             )
-            await asyncio.sleep(config.NORMAL_DELAY)
+            await asyncio.sleep(config.LONG_DELAY)
 
         except Exception as e:
 

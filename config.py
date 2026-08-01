@@ -112,8 +112,8 @@ LOG_AUTO_SCROLL = True
 # Delay
 # ==========================================================
 SHORT_DELAY = 1
-NORMAL_DELAY = 3
-LONG_DELAY = 5
+NORMAL_DELAY = 5
+LONG_DELAY = 10
 POLL_INTERVAL = 2
 GENERATE_WAIT_TIME =60
 

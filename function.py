@@ -38,6 +38,8 @@ def build_scene(scenario_type):
             scene["reference_list"]
         )
 
+        reference_list
+
         final_prompt = build_prompt(
             scene["scene_id"],
             template,
@@ -60,3 +62,5 @@ def build_scene(scenario_type):
         })
 
     return scene_data
+
+
