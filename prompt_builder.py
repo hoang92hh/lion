@@ -33,7 +33,7 @@ def replace_placeholder(prompt,index,asset_list):
     )
 
 
-def build_prompt(template,prompt_core,character_list,reference_list):
+def build_prompt(scene_id, template,prompt_core,character_list,reference_list):
 
     prompt = template.replace(
         "{0}",
@@ -51,6 +51,7 @@ def build_prompt(template,prompt_core,character_list,reference_list):
         2,
         reference_list
     )
+    prompt = scene_id +" " + prompt
 
     return prompt.strip()
 

@@ -39,6 +39,7 @@ def build_scene(scenario_type):
         )
 
         final_prompt = build_prompt(
+            scene["scene_id"],
             template,
             scene["prompt_core"],
             character_list,

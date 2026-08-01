@@ -37,6 +37,7 @@ async def run_scenario(ui,scenario_type):
 
             ui.update_row_ui(
                 scene["scene_id"],
+                scene["final_prompt"],
                 config.STATUS_RUNNING,
                 scene["file_name"]
             )
@@ -63,6 +64,7 @@ async def run_scenario(ui,scenario_type):
 
             ui.update_row_ui(
                 scene["scene_id"],
+                scene["final_prompt"],
                 config.STATUS_DONE,
                 scene["file_name"]
             )
@@ -73,6 +75,7 @@ async def run_scenario(ui,scenario_type):
 
             ui.update_row_ui(
                 scene["scene_id"],
+                scene["final_prompt"],
                 config.STATUS_ERROR,
                 scene["file_name"]
             )

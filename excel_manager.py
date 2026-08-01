@@ -124,10 +124,81 @@ def load_scenario_data(sheet):
 
 # Save Data
 # ==========================================================
-def save_workbook():
-    global _workbook, _workbook_path
-    if _workbook and _workbook_path:
-        _workbook.save(_workbook_path)
+import openpyxl
+import config
+
+
+# Save Data
+# ==========================================================
+import openpyxl
+import config
+
+
+def save_specific_columns_from_ui(scenario_type, ui_data):
+    """
+    Mở file Excel gốc, chỉ cập nhật 3 cột: final_prompt, status_time, file_name
+    dựa trên dữ liệu truyền xuống từ UI. Giữ nguyên tất cả các cột và các tab khác.
+    """
+    # 1. Xác định đúng đường dẫn file
+    if scenario_type == config.SCENARIO_IMAGE:
+        file_path = config.IMAGE_SCENARIO_FILE
+    elif scenario_type == config.SCENARIO_VIDEO:
+        file_path = config.VIDEO_SCENARIO_FILE
+    else:
+        raise ValueError(f"Loại scenario không hợp lệ: {scenario_type}")
+
+    if not file_path.exists():
+        raise FileNotFoundError(f"Không tìm thấy file Excel tại: {file_path}")
+
+    try:
+        # 2. Mở workbook ở chế độ GHI (KHÔNG dùng data_only=True để bảo toàn file)
+        wb = openpyxl.load_workbook(file_path)
+
+        if config.SCENARIO_SHEET in wb.sheetnames:
+            ws = wb[config.SCENARIO_SHEET]
+        else:
+            ws = wb.active
+
+        # Lấy số cột từ cấu hình EXCEL_COLUMNS của bạn
+        col_final_prompt = config.EXCEL_COLUMNS["final_prompt"]
+        col_status_time = config.EXCEL_COLUMNS["status_time"]
+        col_file_name = config.EXCEL_COLUMNS["file_name"]
+
+        # 3. Duyệt qua từng dòng dữ liệu từ UI gửi xuống
+        # Dòng dữ liệu trong Excel bắt đầu từ dòng 2 (dòng 1 là tiêu đề)
+        for index, row_values in enumerate(ui_data):
+            current_row = index + 2
+
+            # Đảm bảo dòng dữ liệu từ UI có đủ các phần tử để bốc tách
+            # Thứ tự phần tử trong row_values tương ứng với thứ tự config.TREE_COLUMNS của bạn:
+            # 0: scene_id, 1: template_key, 2: prompt_core, 3: character_list,
+            # 4: reference_list, 5: final_prompt, 6: status_time, 7: output_id, 8: file_name
+
+            if len(row_values) > 8:
+                # Ghi đè duy nhất 3 cột mục tiêu
+                ws.cell(row=current_row, column=col_final_prompt).value = row_values[5]
+                ws.cell(row=current_row, column=col_status_time).value = row_values[6]
+                ws.cell(row=current_row, column=col_file_name).value = row_values[8]
+
+        # 4. Lưu lại file và giải phóng bộ nhớ
+        wb.save(file_path)
+        wb.close()
+
+        # 5. Đồng bộ lại các biến tạm toàn cục dùng để đọc dữ liệu nếu cần
+        global _workbook, _sheet
+        _workbook = openpyxl.load_workbook(file_path, data_only=True)
+        _sheet = _workbook[config.SCENARIO_SHEET]
+
+        print(f"Cập nhật thành công 3 cột cho file: {file_path.name}")
+        return True
+
+    except PermissionError:
+        raise RuntimeError(
+            f"Không thể ghi! File {file_path.name} vẫn đang bị mở hoặc khóa bởi ứng dụng khác.\n"
+            f"Vui lòng tắt hoàn toàn file Excel đó đi rồi thử lại."
+        )
+    except Exception as e:
+        raise RuntimeError(f"Lỗi khi cập nhật dữ liệu Excel: {str(e)}")
 
 
 # Update Cells

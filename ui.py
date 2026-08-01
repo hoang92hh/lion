@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import config
-from excel_manager import open_workbook, load_scenario_data, save_workbook, get_type_scenario,show_scenario
+from excel_manager import open_workbook, load_scenario_data, save_specific_columns_from_ui, get_type_scenario,show_scenario
 from scenario_runner import run_scenario, stop_scenario
 
 
@@ -76,7 +76,7 @@ class MainUI:
 # ==========================================================
 # UI Update
 
-    def update_row_ui(self, scene_id, status, file_name):
+    def update_row_ui(self, scene_id, final_prompt,status, file_name):
 
         for tree in self.tree.values():
 
@@ -88,7 +88,7 @@ class MainUI:
 
                 if str(values[0]) != str(scene_id):
                     continue
-
+                values[5] = final_prompt
                 values[6] = status
                 values[8] = file_name
 
@@ -181,14 +181,27 @@ class MainUI:
         )
 
     def save_scenario(self):
+        try:
+            # 1. Xác định tab hiện tại (IMAGE hoặc VIDEO)
+            scenario_type = self.current_scenario_type
+            tree = self.tree[scenario_type]
 
-        save_workbook()
+            # 2. Quét toàn bộ dữ liệu trên bảng Treeview hiện tại
+            ui_data = []
+            for item in tree.get_children():
+                row_values = tree.item(item, "values")
+                ui_data.append(row_values)
 
-        self.log_message(
-            "Save Workbook Success."
-        )
+            # 3. Gọi hàm lưu thông số cụ thể sang excel_manager
+            from excel_manager import save_specific_columns_from_ui
+            save_specific_columns_from_ui(scenario_type, ui_data)
 
-# ==========================================================
+            self.log_message(f"Save columns for {scenario_type} Success.")
+
+        except Exception as e:
+            self.log_message(f"Save Scenario Failed: {str(e)}")
+
+    # ==========================================================
 # Event Handlers
     def on_tab_changed(self, event):
         """
