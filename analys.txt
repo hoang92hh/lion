@@ -1,0 +1,168 @@
+1. Có bao nhiêu loài và bao nhiêu cá thể?
+Loài 1: Sư tử (Lion)
+1 con sư tử cái (lioness)
+
+Trong toàn bộ câu chuyện chỉ có một lioness, không xuất hiện bầy sư tử.
+
+Tổng: 1 cá thể
+
+Loài 2: Linh dương (Antelope)
+
+Văn bản ghi:
+
+A small herd of antelope...
+
+Tức là một đàn nhỏ, không nêu số lượng chính xác.
+
+Trong câu chuyện có:
+
+nhiều con trưởng thành
+1 con non/yếu nhất (smallest, weakest member)
+
+Nếu dựng video AI thì nên giữ khoảng:
+
+6–10 con linh dương
+trong đó
+5–9 con trưởng thành
+1 con non
+
+Đây là số lượng hợp lý về mặt hình ảnh.
+
+Tổng
+Loài	Số lượng
+Lioness	1
+Antelope	6–10 (không cố định trong truyện)
+
+
+2. Có thể chia thành bao nhiêu cảnh?
+Nếu dựng cinematic thì mình sẽ chia khoảng 12 cảnh.
+
+
+Scene 1
+Narration
+On the open grasslands, everything appears calm.
+Nội dung:
+Toàn cảnh đồng cỏ châu Phi
+gió thổi
+ánh nắng
+
+→ Establishing Shot
+
+Scene 2
+
+A small herd of antelope grazes peacefully...
+
+Nội dung:
+đàn linh dương ăn cỏ
+tai cử động
+vài con ngẩng đầu
+
+Scene 3
+unaware that every movement is being watched.
+
+Nội dung:
+
+camera chuyển sang bụi cỏ
+lộ mắt sư tử
+
+Scene 4
+a lone lioness waits in absolute silence.
+Nội dung
+lioness nằm thấp
+không di chuyển
+
+Scene 5
+Every step is deliberate...
+Nội dung
+lioness bò thấp
+từng bước rất chậm
+
+Scene 6
+Hunting alone leaves no room for mistakes.
+Nội dung
+close-up
+Lioness
+↓
+Eyes
+↓
+Muscles
+↓
+Feet
+
+
+Scene 7
+the herd finally senses the danger.
+Nội dung
+Một con linh dương ngẩng đầu
+↓
+cả đàn cảnh giác
+
+Scene 8
+The antelope scatter in every direction.
+Đây là cảnh hành động đầu tiên.
+đàn chạy tán loạn
+
+Scene 9
+locking onto the smallest...
+Nội dung
+Camera cho thấy
+lioness bỏ qua con lớn
+đuổi đúng con non
+
+Scene 10
+For nearly a minute...
+Đây có thể là cảnh dài nhất.
+Bao gồm
+chạy
+nhảy
+đổi hướng
+bụi đất
+góc quay flycam
+góc quay ngang
+
+Scene 11
+With one perfectly timed leap...
+Nội dung
+lioness nhảy
+vật ngã
+cắn cổ
+Đây là climax.
+
+Scene 12
+dragging her hard-earned prize...
+Nội dung
+kéo xác qua đồng cỏ
+mặt trời lặn
+kết thúc
+
+3. Nếu muốn video điện ảnh hơn
+
+Thực tế mỗi Scene trên còn có thể chia nhỏ.
+
+Ví dụ Scene 10 có thể thành:
+
+chạy ngang
+cận chân
+POV của linh dương
+POV của sư tử
+flycam
+slow motion
+
+Một video 60–70 giây hoàn toàn có thể có 20–30 shot.
+
+4. Bảng storyboard đề xuất
+Scene	Nội dung	Độ dài
+1	Toàn cảnh đồng cỏ	4 s
+2	Đàn linh dương gặm cỏ	5 s
+3	Sư tử quan sát	5 s
+4	Lioness ẩn mình	5 s
+5	Tiếp cận mục tiêu	6 s
+6	Cận cảnh ánh mắt và bước chân	5 s
+7	Đàn phát hiện nguy hiểm	4 s
+8	Cả đàn bỏ chạy	6 s
+9	Chọn con non làm mục tiêu	5 s
+10	Cuộc truy đuổi	10–12 s
+11	Cú vồ quyết định và hạ gục	6 s
+12	Kéo con mồi rời đi, kết thúc	5–6 s
+
+Như vậy, với đoạn văn này bạn có thể dựng thành 12 scene chính (storyboard), hoặc mở rộng thành khoảng 20–30 shot điện ảnh nếu mỗi scene được chia thành nhiều góc máy khác nhau.

@@ -1,0 +1,115 @@
+Veo3_Project/
+
+I:  Mục tiêu dự án gồm :
+1: Load
+Load Excel    -> Đọc từng Scene theo mỗi loại (image/video)   ->  Hiển thị UI
+các cột của excel file :  "scene_id","template_key","prompt_core","character_list", "reference_list", "final_prompt","status_time", "output_id","file_name"
+
+2 Start
+Load Excel Data  -> Đọc từng Scene   -> Xây dựng Prompt    >Inject Character / Reference    -> Generate Image / Video
+      Condition : Chỉ chạy các dòng c giá trị None"""Error"và bỏ qua:"Done"
+       Thay đổi giá trị  status_time + file_name cho mỗi dòng trên UI
+       Theo tác play-wright trên google flow
+3. Stop
+Dừng tiến trình đang chạy
+
+4. Save
+Lưu giá trị  status_time + file_name xuống Excel
+
+
+lion/
+│
+├── main.py
+│   └── main()
+│
+├── ui.py
+│   ├── load_scenario()
+│   ├── start_scenario()
+         ├── update_row_ui()│
+    ├── stop_scenario()
+│   ├── save_scenario()
+│   └── log_message()
+
+
+├── excel_manager.py
+│   ├── get_type_scenario()
+│   ├── get_workbook()
+│   ├── open_workbook()
+│   ├── close_workbook()
+│   ├── show_scenario()
+│   ├── load_scenario_data)
+│   ├── save_workbook()
+│       ├── update_status()
+│       ├── update_filename()
+
+│
+├── function.py
+├   ├── prompt_builder.py
+            |── build_prompt()
+│           ├── build_filename()
+│           ├── normalize_list()
+│           ├── replace_placeholder()
+│           ├── remove_asset_keywords()
+
+│   ├── build_scene()
+│   ├── get_character_list()
+│   └── get_reference_list()
+│
+├── scenario_runner.py
+│   ├── run_scenario()
+│   ├── stop_scenario()
+│   ├── load_scenario_data()
+│   │── google_flow.py
+│       ├── clear_prompt()
+│       ├── inject_character()
+│       ├── inject_reference()
+│       ├── input_prompt()
+│       ├── click_generate()
+│       ├── wait_generate_finish()
+│
+└── config.py
+
+
+UI
+├── Load  ─────────► excel_manager.py
+├── Save  ─────────► excel_manager.py
+├── Start ─────────► scenario_runner.py
+└── Stop  ─────────► scenario_runner.py
+
+
+scenario_runner.py
+├── function.py         (tách xử lý dữ liệu)
+└── google_flow.py      (tách thao tác Playwright)
+
+function.py
+└── prompt_builder.py   (tách xử lý chuỗi)
+
+Output lần lượt các file code hoàn thiện theo kiến trúc trên, viết ngắn ngon trong khai báo cũng như triển khai các method.
+Mỗi đoạn code ouput là 100 line, dài hơn thì để trả lời ở hội thoại sau khi tôi nói tiếp tục.
+Chỗ nào không rõ hỏi lại, không tự ý phá vỡ cấu trúc dự án, tên method.
+
+
+Vậy từ lượt tiếp theo tôi sẽ bắt đầu bằng config.py.
+Sau khi hoàn thành config.py,
+chúng ta sẽ lần lượt sang excel_manager.py, prompt_builder.py, function.py, google_flow.py, scenario_runner.py, ui.py,
+ và cuối cùng main.py.
+
+ Logic
+  Ui call function
+    Function thực hiện lấy dữ liệu từ sheet "Script" thông qua Excelmanger
+        lấy được templateKey,prompt core, characters, references, status
+        xử ly templateKey-> template thông qua ExcelMangerment
+        Xử lý prompt_filnal thông qua prompt_builder với các tham số templateKey,prompt core, characterList, referenceList,
+        gửi 3 tham số prompt_filnal characterList, referenceList đên Scenario_runner
+    Scenario_runner nhận lệnh từ UI
+    + Lấy các paramter từ function
+    + điều khiển google flow 3 thông qua google_flow.py
+
+
+ Mình cũng rút ra quy tắc để tránh hiểu sai ở các file tiếp theo:
+
+prompt_builder.py: chỉ chứa các hàm hỗ trợ function.py.
+function.py: chuẩn bị dữ liệu cho scenario_runner.py.
+google_flow.py: chỉ chứa các hàm hỗ trợ scenario_runner.py.
+scenario_runner.py: nơi điều phối toàn bộ quy trình Generate.
+ui.py: chỉ xử lý giao diện và gọi excel_manager.py hoặc scenario_runner.py.
