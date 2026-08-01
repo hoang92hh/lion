@@ -5,11 +5,15 @@ scenario_runner.py
 ----------------------------------------------------------
 ==========================================================
 """
+import asyncio
+
 import config
 from function import build_scene
 from google_flow import GoogleFlow
+from network_monitor import NetworkMonitor
 
 _running = False
+
 
 
 # ==========================================================
@@ -19,12 +23,15 @@ _running = False
 async def run_scenario(ui,scenario_type):
 
     global _running
-
     _running = True
 
     google = GoogleFlow()
+    network = NetworkMonitor()
 
     await google.connect()
+    await network.attach(google.page)
+
+
 
     scene_list = build_scene(scenario_type)
 
@@ -39,9 +46,8 @@ async def run_scenario(ui,scenario_type):
                 scene["scene_id"],
                 scene["final_prompt"],
                 config.STATUS_RUNNING,
-                scene["file_name"]
+                "none"
             )
-
             await google.clear_prompt()
 
             await google.inject_character(
@@ -56,18 +62,23 @@ async def run_scenario(ui,scenario_type):
                 scene["final_prompt"]
             )
 
+
             await google.click_generate()
+            await asyncio.sleep(config.GENERATE_WAIT_TIME)
+            asset_name = await network.wait_file_name()
 
-            output_id = await google.wait_generate_finish()
+            if asset_name is None:
+                raise Exception("Generate timeout")
 
-            scene["output_id"] = output_id
+            print("asset_name :", asset_name)
 
             ui.update_row_ui(
                 scene["scene_id"],
                 scene["final_prompt"],
                 config.STATUS_DONE,
-                scene["file_name"]
+                asset_name
             )
+            await asyncio.sleep(config.NORMAL_DELAY)
 
         except Exception as e:
 

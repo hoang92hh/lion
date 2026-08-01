@@ -55,10 +55,7 @@ class GoogleFlow:
 
         print(f"Connected : {self.page.url}")
 
-        self.page.on(
-            "response",
-            self.handle_network_response
-        )
+        self.page.on("response", self.handle_network_response)
 
 
     async def close(self):
@@ -211,24 +208,3 @@ class GoogleFlow:
 
         print("Generate")
 
-
-
-    async def wait_generate_finish(self):
-
-        start_time = asyncio.get_event_loop().time()
-
-        while (
-            asyncio.get_event_loop().time() - start_time
-        ) < config.NETWORK_TIMEOUT:
-
-            if self.output_id:
-
-                print(
-                    f"Output : {self.output_id}"
-                )
-
-                return self.output_id
-
-            await asyncio.sleep(1)
-
-        return "unknown_asset"

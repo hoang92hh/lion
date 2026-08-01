@@ -98,6 +98,12 @@ SELECTORS = {
     "modal_search_input":        'input#add-menu-input',
     # API tạo Asset
     "api_asset_endpoint_keyword":        "/v1/assets",
+
+    "last_asset": "div[data-tile-id]",
+
+    "asset_title": "div[data-side='bottom'] h4",
+
+
 }
 LOG_MAX_LINES = 1000
 LOG_FONT = ("Consolas", 10)
@@ -108,8 +114,8 @@ LOG_AUTO_SCROLL = True
 SHORT_DELAY = 1
 NORMAL_DELAY = 3
 LONG_DELAY = 5
-
 POLL_INTERVAL = 2
+GENERATE_WAIT_TIME =60
 
 # ==========================================================
 # Browser

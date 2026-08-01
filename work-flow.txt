@@ -113,3 +113,21 @@ function.py: chuẩn bị dữ liệu cho scenario_runner.py.
 google_flow.py: chỉ chứa các hàm hỗ trợ scenario_runner.py.
 scenario_runner.py: nơi điều phối toàn bộ quy trình Generate.
 ui.py: chỉ xử lý giao diện và gọi excel_manager.py hoặc scenario_runner.py.
+
+
+
+Generate xong
+      │
+      ▼
+Cách 1: Đọc Title trên DOM (Ưu tiên)
+      │
+      ├── Thành công → trả về title
+      │
+      ▼
+Cách 2: Đọc từ Network Response (Dự phòng)
+      │
+      ▼
+Update UI(file_name)
+      │
+      ▼
+Save Excel
