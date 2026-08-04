@@ -29,30 +29,23 @@ class AssetManager:
         if scene_id and file_name:
             self.asset_map[scene_id] = file_name
 
-    def replace_reference(self, reference_list):
+    def resolve_command(self, commands):
 
-        if not reference_list:
-            return []
+        resolved_commands = []
 
-        result = []
+        for command in commands:
 
-        for ref in reference_list:
+            cmd_type, value = command.split("||", 1)
 
-            result.append(
-                self.asset_map.get(ref, ref)
+            if cmd_type == "REFERENCE":
+                value = self.asset_map.get(value, value)
+
+            resolved_commands.append(
+                f"{cmd_type}||{value}"
             )
 
-        return result
+        return resolved_commands
 
     def get_asset(self, scene_id):
 
         return self.asset_map.get(scene_id)
-
-
-    def replace_text(self, text):
-
-        for key, value in self.asset_map.items():
-            pattern = rf'"\s*{re.escape(key)}\s*"'
-            text = re.sub(pattern, f'"{value}"', text)
-
-        return text

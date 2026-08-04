@@ -2,13 +2,11 @@
 ==========================================================
 Veo 3 Storyboard Station
 scenario_runner.py
-----------------------------------------------------------
-==========================================================
 """
 import asyncio
 
 import config
-from function import build_scene
+from function import build_scene, command_to_prompt
 from google_flow import GoogleFlow
 from network_monitor import NetworkMonitor
 from asset_manager import AssetManager
@@ -16,11 +14,8 @@ from asset_manager import AssetManager
 _running = False
 
 
-
-# ==========================================================
 # Scenario
 # ==========================================================
-
 async def run_scenario(ui,scenario_type):
 
     global _running
@@ -45,28 +40,16 @@ async def run_scenario(ui,scenario_type):
 
             ui.update_row_ui(
                 scene["scene_id"],
-                scene["final_prompt"],
+                command_to_prompt(scene["command"]),
                 config.STATUS_RUNNING,
                 "none"
             )
             await google.clear_prompt()
 
-            await google.inject_character(
-                scene["character_list"]
-            )
+            command = scene["command"]
+            command = asset.resolve_command(command)
 
-            # thay the reference-value tuong ung voi reference-key
-            reference_list = asset.replace_reference(
-                scene["reference_list"]
-            )
-
-            await google.inject_reference(
-                reference_list
-            )
-
-            final_prompt = scene["final_prompt"]
-            final_prompt = asset.replace_text(final_prompt)
-            await google.input_prompt(final_prompt)
+            await google.input_prompt(command)
 
             await google.click_generate()
 
@@ -79,15 +62,13 @@ async def run_scenario(ui,scenario_type):
             if asset_name is None:
                 raise Exception("Generate timeout")
 
-            print("asset_name :", asset_name)
-
             ui.update_row_ui(
                 scene["scene_id"],
-                scene["final_prompt"],
+                command_to_prompt(scene["command"]),
                 config.STATUS_DONE,
                 asset_name
             )
-            await asyncio.sleep(config.LONG_DELAY)
+            await asyncio.sleep(config.GENERATE_WAIT_TIME)
 
         except Exception as e:
 
@@ -95,7 +76,7 @@ async def run_scenario(ui,scenario_type):
 
             ui.update_row_ui(
                 scene["scene_id"],
-                scene["final_prompt"],
+                command_to_prompt(scene["command"]),
                 config.STATUS_ERROR,
                 scene["file_name"]
             )

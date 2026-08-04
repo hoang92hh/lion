@@ -4,7 +4,8 @@ function.py
 """
 import config
 from excel_manager import get_type_scenario, load_scenario_data, get_template_dict
-from prompt_builder import normalize_list, build_prompt, build_filename
+from prompt_builder import normalize_list, build_command
+
 
 # ==========================================================
 # Build Scene
@@ -38,9 +39,7 @@ def build_scene(scenario_type):
             scene["reference_list"]
         )
 
-        reference_list
-
-        final_prompt = build_prompt(
+        command_List = build_command(
             scene["scene_id"],
             template,
             scene["prompt_core"],
@@ -52,15 +51,28 @@ def build_scene(scenario_type):
 
             "scene_id": scene["scene_id"],
 
-            "final_prompt": final_prompt,
+            "command": command_List,
 
             "character_list": character_list,
 
             "reference_list": reference_list,
 
-            "file_name": build_filename(final_prompt)
+            "file_name": scene["scene_id"]+ "is creating"
         })
 
     return scene_data
+
+def command_to_prompt(commands):
+
+    prompt = ""
+
+    for command in commands:
+
+        cmd_type, value = command.split("||", 1)
+
+        if cmd_type in ("TEXT", "CHARACTER", "REFERENCE"):
+            prompt += value
+
+    return prompt
 
 

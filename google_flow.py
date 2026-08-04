@@ -121,82 +121,74 @@ class GoogleFlow:
 # Asset
 # ==========================================================
 
-    async def inject_assets(self,keyword_list):
+    async def inject_asset(self, keyword):
 
-        if not keyword_list:
+        if not keyword:
             return
 
-        if isinstance(keyword_list,list):
-            keyword_list = ",".join(keyword_list)
+        print(f"Inject : {keyword}")
 
-        for keyword in keyword_list.split(","):
+        # Mở popup mention
+        await self.page.keyboard.type("@")
+        await asyncio.sleep(config.SHORT_DELAY)
 
-            keyword = keyword.strip()
+        # Tìm asset
+        await self.page.keyboard.insert_text(keyword)
+        await asyncio.sleep(config.NORMAL_DELAY)
 
-            if not keyword:
-                continue
+        # Chọn asset
+        await self.page.keyboard.press("ArrowUp")
+        await asyncio.sleep(config.SHORT_DELAY)
 
-            print(f"Inject : {keyword}")
+        await self.page.keyboard.press("Enter")
+        await asyncio.sleep(config.NORMAL_DELAY)
 
-            await self.page.keyboard.type("@")
+        # # Đóng popup nếu còn
+        # await self.page.keyboard.press("Escape")
+        # await asyncio.sleep(config.SHORT_DELAY)
+        # # Đưa focus trở lại ô input
+        # await self.page.click(config.SELECTORS["main_prompt_area"])
+        # await asyncio.sleep(config.SHORT_DELAY)
 
-            await asyncio.sleep(2)
 
-            await self.page.keyboard.insert_text(keyword)
 
-            await asyncio.sleep(config.LONG_DELAY)
+    # ==========================================================
+    # Generate
+    # ==========================================================
 
-            await self.page.keyboard.press("Tab")
+    async def input_prompt(self, commands):
 
-            await asyncio.sleep(config.NORMAL_DELAY)
+        try:
 
-            await self.page.keyboard.press("Enter")
+            prompt_selector = config.SELECTORS["main_prompt_area"]
 
-            await asyncio.sleep(config.SHORT_DELAY)
-
-            await self.page.keyboard.press("Escape")
-
-            await asyncio.sleep(config.SHORT_DELAY)
+            await self.page.wait_for_selector(
+                prompt_selector,
+                state="visible",
+                timeout=5000
+            )
 
             await self.clear_prompt()
 
+            for command in commands:
 
-    async def inject_character(self,character_list):
+                cmd_type, value = command.split("||", 1)
 
-        await self.inject_assets(
-            character_list
-        )
+                if cmd_type == "TEXT":
 
+                    await self.page.click(prompt_selector)
+                    await self.page.keyboard.press("Control+End")
+                    await self.page.keyboard.insert_text(value)
 
-    async def inject_reference(self,reference_list):
+                elif cmd_type in ("CHARACTER", "REFERENCE"):
 
-        await self.inject_assets(
-            reference_list
-        )
+                    await self.inject_asset(value)
 
-
-# ==========================================================
-# Generate
-# ==========================================================
-
-    async def input_prompt(self, final_prompt):
-        print(final_prompt)
-
-        try:
-            # 1. Xác định ô nhập liệu dựa trên selector từ file cấu hình
-            prompt_selector = config.SELECTORS["main_prompt_area"]
-
-            # 2. Chờ cho đến khi ô nhập liệu xuất hiện và sẵn sàng trên màn hình
-            await self.page.wait_for_selector(prompt_selector, state="visible", timeout=5000)
-
-            # 3. Sử dụng hàm fill của đối tượng page để "dán" (paste) toàn bộ văn bản lập tức
-            await self.page.fill(prompt_selector, final_prompt)
-
-            # 4. Giữ lại khoảng dừng ngắn để giao diện kịp cập nhật dữ liệu
             await asyncio.sleep(config.NORMAL_DELAY)
 
         except Exception as e:
             print(f"Lỗi khi nhập prompt: {e}")
+
 
     async def click_generate(self):
 
@@ -207,4 +199,6 @@ class GoogleFlow:
         )
 
         print("Generate")
+
+
 
